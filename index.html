@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta property="og:title" content="PlugStay">
+<meta property="og:description" content="충전하는 동안 휴대폰을 탁상시계·타이머·정보 대시보드로 바꿔 주는 안드로이드 앱">
+<meta property="og:image" content="https://leehama.github.io/plugstay/img/calm.jpg">
+<link rel="icon" type="image/png" href="img/icon.png">
+<title>PlugStay</title>
+<meta name="description" content="충전하는 동안 휴대폰을 탁상시계·타이머·정보 대시보드로 바꿔 주는 안드로이드 앱">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@800;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
+<style>
+/* 레이아웃: 침대 옆 탁상 — 첫 화면은 실제로 흐르는 가로 시계, 그 아래로 화면 갤러리 → 동작 순서 → 테스터 모집 */
+:root {
+  --bg: #F3F6FD;
+  --surface: #FFFFFF;
+  --line: #DCE3F3;
+  --fg: #151C3F;
+  --muted: #586287;
+  --indigo: #3A4BD6;
+  --mint: #0C9B6F;
+  --mint-soft: #DDF6EC;
+  --screen: #000000;
+  --screen-fg: #F2F2F2;
+  --screen-dim: #9AA3C2;
+  --bezel: #0F1220;
+  --shadow: 0 30px 60px rgba(30, 40, 100, .18), 0 8px 16px rgba(30, 40, 100, .10);
+  --f-display: "Nunito", "Noto Sans KR", system-ui, sans-serif;
+  --f-body: "Noto Sans KR", "Malgun Gothic", "Apple SD Gothic Neo", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0B0E1C; --surface: #141933; --line: #262D52; --fg: #EEF1FF; --muted: #A3ABCF;
+    --indigo: #8E9BFF; --mint: #6EE7B7; --mint-soft: #123B2F; --bezel: #232A4D;
+    --shadow: 0 30px 60px rgba(0, 0, 0, .5), 0 8px 16px rgba(0, 0, 0, .35);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0B0E1C; --surface: #141933; --line: #262D52; --fg: #EEF1FF; --muted: #A3ABCF;
+  --indigo: #8E9BFF; --mint: #6EE7B7; --mint-soft: #123B2F; --bezel: #232A4D;
+  --shadow: 0 30px 60px rgba(0, 0, 0, .5), 0 8px 16px rgba(0, 0, 0, .35);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+img { max-width: 100%; }
+body { background: var(--bg); color: var(--fg); font-family: var(--f-body); font-size: 16px; line-height: 1.65; word-break: keep-all; -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-inline: 20px; }
+a { color: var(--indigo); }
+h1, h2, h3 { text-wrap: balance; margin: 0; line-height: 1.25; letter-spacing: -0.02em; }
+h2 { font-size: clamp(26px, 4vw, 36px); font-weight: 900; }
+.eyebrow { font-size: 13px; font-weight: 700; letter-spacing: .08em; color: var(--mint); }
+.lead { color: var(--muted); font-size: 17px; max-width: 60ch; margin: 0; }
+section { padding-block: 72px; }
+.section-head { display: grid; gap: 10px; margin-bottom: 36px; }
+
+/* 상단 */
+.top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 18px; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--fg); }
+.brand img { width: 36px; height: 36px; border-radius: 10px; }
+.brand b { font-family: var(--f-display); font-weight: 900; font-size: 22px; color: var(--indigo); }
+.nav { display: flex; gap: 20px; font-size: 15px; }
+.nav a { color: var(--muted); text-decoration: none; }
+.nav a:hover { color: var(--fg); }
+
+/* 첫 화면 */
+.hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 48px; align-items: center; padding-block: 40px 64px; }
+.status { display: inline-flex; align-items: center; gap: 8px; background: var(--mint-soft); color: var(--mint); font-weight: 700; font-size: 14px; padding: 6px 14px; border-radius: 999px; }
+.status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--mint); }
+.hero h1 { font-size: clamp(34px, 5.2vw, 54px); font-weight: 900; margin-top: 18px; }
+.hero h1 em { font-style: normal; color: var(--mint); }
+.hero .lead { margin-top: 16px; }
+.cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 22px; border-radius: 12px; font-weight: 700; font-size: 16px; text-decoration: none; border: 2px solid transparent; }
+.btn.primary { background: var(--indigo); color: var(--surface); }
+.btn.ghost { border-color: var(--line); color: var(--fg); background: var(--surface); }
+.btn:focus-visible, .copy:focus-visible, .nav a:focus-visible { outline: 3px solid var(--mint); outline-offset: 2px; }
+
+.desk { position: relative; padding-bottom: 28px; }
+.phone { background: var(--bezel); border-radius: 34px; padding: 12px; box-shadow: var(--shadow); }
+.screen { aspect-ratio: 2.35 / 1; max-width: 100%; background: var(--screen); border-radius: 24px; display: grid; place-content: center; container-type: inline-size; overflow: hidden; }
+.clock { display: grid; gap: 1.2cqw; text-align: left; }
+.clock .date { font-family: var(--f-body); color: var(--screen-dim); font-size: 4.2cqw; font-weight: 500; line-height: 1; }
+.clock .time { font-family: var(--f-display); font-weight: 900; color: var(--screen-fg); font-size: 17cqw; line-height: .95; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+.clock .time small { font-size: .38em; color: var(--screen-dim); margin-left: .12em; }
+.cable { position: absolute; right: 9%; bottom: 0; width: 6px; height: 40px; border-radius: 3px; background: var(--line); }
+.charge { position: absolute; right: calc(9% + 14px); bottom: 6px; font-size: 13px; color: var(--muted); font-weight: 500; }
+
+/* 화면 갤러리 */
+.gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; }
+.shot { margin: 0; display: grid; gap: 12px; }
+.shot .frame { background: var(--bezel); border-radius: 22px; padding: 8px; box-shadow: var(--shadow); }
+.shot img { display: block; width: 100%; aspect-ratio: 2975 / 1268; object-fit: cover; border-radius: 15px; }
+.shot figcaption { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.shot figcaption b { font-size: 17px; }
+.shot figcaption span { color: var(--muted); font-size: 15px; }
+.tag { font-size: 12px; font-weight: 700; color: var(--indigo); border: 1.5px solid var(--line); border-radius: 999px; padding: 1px 10px; }
+
+/* 동작 순서 */
+.flow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; list-style: none; padding: 0; margin: 0; counter-reset: step; }
+.flow li { background: var(--surface); border: 1.5px solid var(--line); border-radius: 18px; padding: 24px; display: grid; gap: 8px; align-content: start; counter-increment: step; }
+.flow li::before { content: counter(step); font-family: var(--f-display); font-weight: 900; font-size: 40px; line-height: 1; color: var(--mint); }
+.flow b { font-size: 18px; }
+.flow p { margin: 0; color: var(--muted); font-size: 15px; }
+
+/* 기능 */
+.features { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 40px; align-items: center; }
+.map { border-radius: 18px; overflow: hidden; box-shadow: var(--shadow); }
+.map img { display: block; width: 100%; }
+.facts { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; }
+.facts li { display: grid; gap: 2px; padding-left: 16px; border-left: 3px solid var(--mint-soft); }
+.facts b { font-size: 17px; }
+.facts span { color: var(--muted); font-size: 15px; }
+.num { font-family: var(--f-display); font-weight: 900; color: var(--indigo); }
+
+/* 테스터 모집 */
+.join { background: var(--surface); border: 1.5px solid var(--line); border-radius: 26px; padding: clamp(24px, 5vw, 48px); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; }
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; counter-reset: j; }
+.steps li { display: grid; grid-template-columns: 36px minmax(0, 1fr); gap: 14px; counter-increment: j; }
+.steps li::before { content: counter(j); width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: var(--indigo); color: var(--surface); font-weight: 900; font-family: var(--f-display); }
+.steps b { display: block; }
+.steps span { color: var(--muted); font-size: 15px; }
+.copyrow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 8px; }
+.copyrow code { font-family: ui-monospace, Consolas, monospace; font-size: 14px; background: var(--bg); border: 1.5px solid var(--line); border-radius: 8px; padding: 6px 10px; overflow-wrap: anywhere; min-width: 0; user-select: all; }
+.go { display: inline-flex; align-items: center; min-height: 36px; padding: 0 14px; border-radius: 8px; background: var(--indigo); color: var(--surface); font-size: 14px; font-weight: 700; text-decoration: none; }
+.go:focus-visible { outline: 3px solid var(--mint); outline-offset: 2px; }
+.copy { font: inherit; font-size: 14px; font-weight: 700; border: 1.5px solid var(--line); background: var(--surface); color: var(--fg); border-radius: 8px; padding: 6px 12px; cursor: pointer; }
+.note { margin-top: 18px; font-size: 14px; color: var(--muted); }
+
+/* 개인정보 */
+.privacy { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.privacy div { display: grid; gap: 6px; }
+.privacy b { font-size: 17px; }
+.privacy p { margin: 0; color: var(--muted); font-size: 15px; }
+
+footer { border-top: 1.5px solid var(--line); padding-block: 28px 40px; color: var(--muted); font-size: 14px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+
+@media (max-width: 860px) {
+  .hero, .features, .join { grid-template-columns: minmax(0, 1fr); }
+  .gallery { grid-template-columns: minmax(0, 1fr); }
+  .flow, .privacy { grid-template-columns: minmax(0, 1fr); }
+  .nav { display: none; }
+  section { padding-block: 52px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .clock .time small { transition: opacity .2s; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="#top"><img src="img/icon.png" alt=""><b>PlugStay</b></a>
+    <nav class="nav" aria-label="페이지 메뉴">
+      <a href="#screens">화면</a>
+      <a href="#how">동작</a>
+      <a href="#join">테스터 신청</a>
+      <a href="#privacy">개인정보</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <div class="hero">
+      <div>
+        <span class="status">Google Play 비공개 테스트 중</span>
+        <h1>충전하는 동안,<br>휴대폰이 <em>탁상시계</em>가 됩니다</h1>
+        <p class="lead">충전기를 꽂으면 PlugStay가 저절로 떠서 큰 시계, 타이머, 날씨, 음악, 쉼 화면을 보여줘요. 침대 옆에서도, 책상 위에서도 그냥 세워 두기만 하면 됩니다.</p>
+        <div class="cta">
+          <a class="btn primary" href="#join">테스터 신청하기</a>
+          <a class="btn ghost" href="#screens">화면 둘러보기</a>
+        </div>
+      </div>
+      <div class="desk" aria-label="PlugStay 시계 화면 예시">
+        <div class="phone">
+          <div class="screen">
+            <div class="clock">
+              <div class="date" id="clock-date">2026년 10월 8일 (목)</div>
+              <div class="time" id="clock-time">16:35<small>:12</small></div>
+            </div>
+          </div>
+        </div>
+        <div class="cable" aria-hidden="true"></div>
+        <div class="charge">⚡ 충전 중</div>
+      </div>
+    </div>
+
+    <section id="screens">
+      <div class="section-head">
+        <span class="eyebrow">SCREENS</span>
+        <h2>좌우로 테마, 위아래로 화면</h2>
+        <p class="lead">시계, 타이머, 인포, 사진, 날씨, 플레이어, 쉼&amp;생활. 7가지 테마에 화면이 25가지 있어요. 아래는 실제 휴대폰에서 캡처한 화면입니다.</p>
+      </div>
+      <div class="gallery">
+        <figure class="shot"><div class="frame"><img src="img/calm.jpg" alt="테라리움 영상 위에 시각이 표시된 쉼 화면" loading="lazy"></div>
+          <figcaption><span class="tag">쉼&amp;생활</span><b>테라리움·불멍·물멍</b><span>영상과 명화, 명언</span></figcaption></figure>
+        <figure class="shot"><div class="frame"><img src="img/big.jpg" alt="3:02가 크게 표시된 시계 화면" loading="lazy"></div>
+          <figcaption><span class="tag">시계</span><b>큰 시계</b><span>요일·기온·다음 알람까지</span></figcaption></figure>
+        <figure class="shot"><div class="frame"><img src="img/weather.jpg" alt="현재 날씨와 시간별 예보 화면" loading="lazy"></div>
+          <figcaption><span class="tag">날씨</span><b>날씨와 미세먼지</b><span>시간별·일별 예보, 달 모양</span></figcaption></figure>
+        <figure class="shot"><div class="frame"><img src="img/pomo.jpg" alt="25:00 뽀모도로 타이머 화면" loading="lazy"></div>
+          <figcaption><span class="tag">타이머</span><b>뽀모도로</b><span>모래시계·메트로놈 등 8가지</span></figcaption></figure>
+        <figure class="shot"><div class="frame"><img src="img/night.jpg" alt="빨간색으로 바뀐 야간 모드 시계" loading="lazy"></div>
+          <figcaption><span class="tag">야간 모드</span><b>밤에는 은은하게</b><span>빨강·주황으로 눈부심을 줄여요</span></figcaption></figure>
+        <figure class="shot"><div class="frame"><img src="img/led.jpg" alt="초록 LED 숫자 시계 화면" loading="lazy"></div>
+          <figcaption><span class="tag">시계</span><b>LED 시계</b><span>시계 색은 파스텔·형광 18가지</span></figcaption></figure>
+      </div>
+    </section>
+
+    <section id="how">
+      <div class="section-head">
+        <span class="eyebrow">HOW IT WORKS</span>
+        <h2>꽂으면 뜨고, 뽑으면 닫혀요</h2>
+        <p class="lead">설정에서 자동으로 띄우기를 켜 두면, 앱을 열 필요가 없어요.</p>
+      </div>
+      <ol class="flow">
+        <li><b>충전기를 꽂으면</b><p>잠금화면이나 꺼진 화면에서도 대시보드가 바로 떠요. 충전 중 가로로 세울 때만 띄우도록 고를 수도 있어요.</p></li>
+        <li><b>세워 두고 쓰다가</b><p>좌우로 넘겨 테마를, 위아래로 넘겨 화면 모양을 바꿔요. 화면 전체가 조금씩 움직여 번인을 막아요.</p></li>
+        <li><b>뽑으면 닫혀요</b><p>충전기를 뽑거나, 정한 시각이 되거나, 정한 시간이 지나면 자동으로 닫히게 할 수 있어요.</p></li>
+      </ol>
+    </section>
+
+    <section id="features">
+      <div class="features">
+        <div class="map"><img src="img/map.jpg" alt="PlugStay의 25개 화면을 테마별로 정리한 화면 지도" loading="lazy"></div>
+        <div>
+          <div class="section-head">
+            <span class="eyebrow">DETAILS</span>
+            <h2>한눈에 고르는 <span class="num">25</span>개 화면</h2>
+          </div>
+          <ul class="facts">
+            <li><b>화면 지도</b><span>모든 화면을 썸네일로 보고 바로 골라요.</span></li>
+            <li><b>야간 모드</b><span>어두워지거나 정한 시간이 되면 색을 바꿔요.</span></li>
+            <li><b>번인 방지</b><span>밤새 켜 둬도 화면이 상하지 않게 위치를 조금씩 옮겨요.</span></li>
+            <li><b>폴더블 지원</b><span>펼치거나 반쯤 접으면 두 칸에 서로 다른 화면을 띄워요.</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="join">
+      <div class="join">
+        <div class="section-head" style="margin:0">
+          <span class="eyebrow">CLOSED TEST</span>
+          <h2>테스터를 모집하고 있어요</h2>
+          <p class="lead">PlugStay는 정식 출시 전 Google Play 비공개 테스트 중이에요. 안드로이드 휴대폰과 Google 계정이 있다면 누구나 참여할 수 있어요. 세 단계 모두 같은 Google 계정으로 진행해 주세요.</p>
+        </div>
+        <div>
+          <ol class="steps">
+            <li><div><b>테스터 그룹에 가입하기</b><span>Play 스토어에서 쓰는 Google 계정으로 로그인한 뒤 "그룹 가입"을 눌러주세요.</span>
+              <div class="copyrow"><a class="go" href="https://groups.google.com/g/plugstay-testers" target="_blank" rel="noopener">그룹 가입하기</a><code id="group">https://groups.google.com/g/plugstay-testers</code><button class="copy" type="button" data-copy="group">복사</button></div></div></li>
+            <li><div><b>테스트에 참여하기</b><span>같은 계정으로 열고 "테스터 되기"를 눌러주세요. 그룹에 가입한 직후엔 반영까지 몇 분 걸릴 수 있어요.</span>
+              <div class="copyrow"><a class="go" href="https://play.google.com/apps/testing/com.plugstay.app" target="_blank" rel="noopener">테스터 되기</a><code id="optin">https://play.google.com/apps/testing/com.plugstay.app</code><button class="copy" type="button" data-copy="optin">복사</button></div></div></li>
+            <li><div><b>Play 스토어에서 설치하기</b><span>휴대폰에서 열고 설치해 주세요. 테스터가 아니면 "찾을 수 없음"으로 나와요.</span>
+              <div class="copyrow"><a class="go" href="https://play.google.com/store/apps/details?id=com.plugstay.app" target="_blank" rel="noopener">설치하기</a><code id="store">https://play.google.com/store/apps/details?id=com.plugstay.app</code><button class="copy" type="button" data-copy="store">복사</button></div></div></li>
+            <li><div><b>14일 동안 지우지 말아주세요</b><span>설치한 채로 가끔 열어 주시면 돼요. 정식 출시를 위한 Google Play 조건이에요.</span></div></li>
+          </ol>
+          <p class="note">불편한 점이나 아이디어는 Play 스토어의 테스트 의견이나 leehama1236@gmail.com으로 보내주세요.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="privacy">
+      <div class="section-head">
+        <span class="eyebrow">PRIVACY</span>
+        <h2>내 정보는 휴대폰에</h2>
+      </div>
+      <div class="privacy">
+        <div><b>회원가입 없음</b><p>광고, 분석 도구, 개발자 서버가 없어요. 개발자는 사용자의 어떤 정보도 받지 않아요.</p></div>
+        <div><b>필요한 만큼만 전송</b><p>날씨에는 대략적인 위치를, 가사 검색에는 곡 제목과 아티스트를 해당 서비스로만 보내요.</p></div>
+        <div><b>기기 안에서만</b><p>캘린더, 블루투스 기기, 알림 개수, 사진은 휴대폰 밖으로 나가지 않아요.</p></div>
+      </div>
+      <p class="note"><a href="https://gist.github.com/leehama/9849848ca546cbf602998a06ece27f4d" target="_blank" rel="noopener">개인정보처리방침 전문 보기</a></p>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PlugStay</span>
+    <span>문의 leehama1236@gmail.com</span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  var days = ["일", "월", "화", "수", "목", "금", "토"];
+  var dateEl = document.getElementById("clock-date");
+  var timeEl = document.getElementById("clock-time");
+  function pad(n) { return n < 10 ? "0" + n : "" + n; }
+  function tick() {
+    var d = new Date();
+    dateEl.textContent = d.getFullYear() + "년 " + (d.getMonth() + 1) + "월 " + d.getDate() + "일 (" + days[d.getDay()] + ")";
+    timeEl.innerHTML = pad(d.getHours()) + ":" + pad(d.getMinutes()) + "<small>:" + pad(d.getSeconds()) + "</small>";
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  document.querySelectorAll(".copy").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var el = document.getElementById(btn.dataset.copy);
+      var text = el.textContent;
+      function done() { btn.textContent = "복사됨"; setTimeout(function () { btn.textContent = "복사"; }, 1500); }
+      function fallback() {
+        var r = document.createRange(); r.selectNodeContents(el);
+        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+        btn.textContent = "선택됨";
+        setTimeout(function () { btn.textContent = "복사"; }, 1500);
+      }
+      try {
+        navigator.clipboard.writeText(text).then(done, fallback);
+      } catch (e) { fallback(); }
+    });
+  });
+})();
+</script>
+</body>
+</html>
