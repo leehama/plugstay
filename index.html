@@ -120,6 +120,7 @@ section { padding-block: 72px; }
 
 /* 테스터 모집 */
 .join { background: var(--surface); border: 1.5px solid var(--line); border-radius: 26px; padding: clamp(24px, 5vw, 48px); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; }
+.join > .section-head { align-content: start; }
 .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; counter-reset: j; }
 .steps li { display: grid; grid-template-columns: 36px minmax(0, 1fr); gap: 14px; counter-increment: j; }
 .steps li::before { content: counter(j); width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: var(--indigo); color: var(--surface); font-weight: 900; font-family: var(--f-display); }
