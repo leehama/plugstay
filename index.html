@@ -23,6 +23,8 @@
   --indigo: #3A4BD6;
   --mint: #0C9B6F;
   --mint-soft: #DDF6EC;
+  --warn: #A34A00;
+  --warn-soft: #FFF1E0;
   --screen: #000000;
   --screen-fg: #F2F2F2;
   --screen-dim: #9AA3C2;
@@ -34,14 +36,14 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #0B0E1C; --surface: #141933; --line: #262D52; --fg: #EEF1FF; --muted: #A3ABCF;
-    --indigo: #8E9BFF; --mint: #6EE7B7; --mint-soft: #123B2F; --bezel: #232A4D;
+    --indigo: #8E9BFF; --mint: #6EE7B7; --mint-soft: #123B2F; --warn: #FFB46B; --warn-soft: #3A2612; --bezel: #232A4D;
     --shadow: 0 30px 60px rgba(0, 0, 0, .5), 0 8px 16px rgba(0, 0, 0, .35);
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #0B0E1C; --surface: #141933; --line: #262D52; --fg: #EEF1FF; --muted: #A3ABCF;
-  --indigo: #8E9BFF; --mint: #6EE7B7; --mint-soft: #123B2F; --bezel: #232A4D;
+  --indigo: #8E9BFF; --mint: #6EE7B7; --mint-soft: #123B2F; --warn: #FFB46B; --warn-soft: #3A2612; --bezel: #232A4D;
   --shadow: 0 30px 60px rgba(0, 0, 0, .5), 0 8px 16px rgba(0, 0, 0, .35);
   color-scheme: dark;
 }
@@ -141,6 +143,9 @@ section { padding-block: 72px; }
 .keep { background: var(--mint-soft); border-radius: 16px; padding: 18px 20px; display: grid; gap: 4px; }
 .keep b { color: var(--mint); font-size: 17px; }
 .keep span { font-size: 15px; }
+.caution { background: var(--warn-soft); border: 1.5px solid var(--warn); border-radius: 16px; padding: 16px 20px; display: grid; gap: 4px; }
+.caution b { color: var(--warn); font-size: 17px; }
+.caution span { font-size: 15px; }
 .note { margin-top: 18px; font-size: 14px; color: var(--muted); }
 /* 개인정보 */
 .privacy { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
@@ -259,6 +264,11 @@ footer { border-top: 1.5px solid var(--line); padding-block: 28px 40px; color: v
           <span class="eyebrow">CLOSED TEST</span>
           <h2>테스터 참여 방법</h2>
           <p class="lead">PlugStay는 정식 출시 전 Google Play 비공개 테스트 중이에요. 안드로이드 휴대폰과 Google 계정만 있으면 누구나 참여할 수 있어요. <b>세 링크 모두 휴대폰에서, 같은 Google 계정으로</b> 열어 주세요.</p>
+        </div>
+
+        <div class="caution" role="note">
+          <b>[주의] 로그인한 계정과 Play 스토어 계정이 같아야 설치할 수 있어요</b>
+          <span>테스터 그룹·테스트 참여 링크를 연 Google 계정과 휴대폰 Play 스토어에 로그인된 계정이 다르면 설치 링크에서 앱이 보이지 않아요. 계정이 여러 개라면 Play 스토어 오른쪽 위 프로필에서 같은 계정으로 바꾼 뒤 진행해 주세요.</span>
         </div>
 
         <div class="stage">
