@@ -109,6 +109,20 @@ section { padding-block: 72px; }
 .news b { font-size: 18px; }
 .news p { margin: 0; color: var(--muted); font-size: 15px; }
 
+/* 재생바 모양: 앱의 그리기 코드를 캔버스로 옮겨 실제처럼 움직인다 */
+.bars { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; list-style: none; padding: 0; margin: 0; }
+.bars li { background: var(--screen); border-radius: 22px; padding: 22px 24px 18px; display: grid; gap: 10px; box-shadow: var(--shadow); min-width: 0; }
+.bars .bar-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.bars b { color: var(--screen-fg); font-size: 17px; }
+.bars .bar-head span { color: var(--screen-dim); font-size: 14px; }
+.bars canvas { display: block; width: 100%; height: 84px; }
+.bars .bar-time { display: flex; justify-content: space-between; color: var(--screen-dim); font-size: 13px; font-variant-numeric: tabular-nums; }
+
+.player-facts { list-style: none; margin: 0 0 28px; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.player-facts li { display: grid; gap: 2px; padding-left: 16px; border-left: 3px solid var(--mint-soft); }
+.player-facts b { font-size: 17px; }
+.player-facts span { color: var(--muted); font-size: 15px; }
+
 /* 동작 순서 */
 .flow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; list-style: none; padding: 0; margin: 0; counter-reset: step; }
 .flow li { background: var(--surface); border: 1.5px solid var(--line); border-radius: 18px; padding: 24px; display: grid; gap: 8px; align-content: start; counter-increment: step; }
@@ -168,7 +182,7 @@ footer { border-top: 1.5px solid var(--line); padding-block: 28px 40px; color: v
   .hero, .features { grid-template-columns: minmax(0, 1fr); }
   .guide { grid-template-columns: minmax(0, 1fr); }
   .gallery { grid-template-columns: minmax(0, 1fr); }
-  .flow, .privacy, .news { grid-template-columns: minmax(0, 1fr); }
+  .flow, .privacy, .news, .bars, .player-facts { grid-template-columns: minmax(0, 1fr); }
   .nav { display: none; }
   section { padding-block: 52px; }
 }
@@ -184,6 +198,7 @@ footer { border-top: 1.5px solid var(--line); padding-block: 28px 40px; color: v
     <nav class="nav" aria-label="페이지 메뉴">
       <a href="#screens">화면</a>
       <a href="#new">새 기능</a>
+      <a href="#player-bars">플레이어</a>
       <a href="#how">동작</a>
       <a href="#join">테스터 신청</a>
       <a href="#privacy">개인정보</a>
@@ -285,6 +300,25 @@ footer { border-top: 1.5px solid var(--line); padding-block: 28px 40px; color: v
       </div>
     </section>
 
+    <section id="player-bars">
+      <div class="section-head">
+        <span class="eyebrow">PLAYER</span>
+        <h2>지금 듣는 음악을 크게</h2>
+        <p class="lead">멜론·스포티파이 같은 음악 앱에서 재생 중인 음악을 저절로 잡아 앨범 자켓과 함께 크게 보여줘요.</p>
+      </div>
+      <ul class="player-facts">
+        <li><b>재생 중인 곡을 저절로</b><span>지금 소리가 나는 앱의 곡 정보를 받아 와요. 앱을 바꿔도 따라가고, 이전·재생·다음도 여기서 눌러요.</span></li>
+        <li><b>싱크 가사</b><span>시간이 맞춰진 가사가 있으면 노래에 맞춰 지금 줄을 따라가며 보여줘요. 노래방처럼 크게 보는 화면도 있어요.</span></li>
+        <li><b>고르는 재생바</b><span>재생바를 길게 누르면 아래 네 가지 모양 중에 골라요. 지난 구간은 앨범 자켓 색으로 물들어요.</span></li>
+      </ul>
+      <ul class="bars">
+        <li><div class="bar-head"><b>기본</b><span>두꺼운 막대와 손잡이</span></div><canvas data-bar="basic" role="img" aria-label="기본 재생바 애니메이션"></canvas><div class="bar-time"><span data-elapsed>1:32</span><span>4:01</span></div></li>
+        <li><div class="bar-head"><b>물결</b><span>지난 구간 위로 흐르는 물결</span></div><canvas data-bar="wave" role="img" aria-label="물결 재생바 애니메이션"></canvas><div class="bar-time"><span data-elapsed>1:32</span><span>4:01</span></div></li>
+        <li><div class="bar-head"><b>음파</b><span>소리에 맞춰 뛰는 파형</span></div><canvas data-bar="soundwave" role="img" aria-label="음파 재생바 애니메이션"></canvas><div class="bar-time"><span data-elapsed>1:32</span><span>4:01</span></div></li>
+        <li><div class="bar-head"><b>걷기</b><span>재생 위치를 걸어가는 사람</span></div><canvas data-bar="walk" role="img" aria-label="걷기 재생바 애니메이션"></canvas><div class="bar-time"><span data-elapsed>1:32</span><span>4:01</span></div></li>
+      </ul>
+    </section>
+
     <section id="join">
       <div class="join">
         <div class="section-head">
@@ -361,6 +395,120 @@ footer { border-top: 1.5px solid var(--line); padding-block: 28px 40px; color: v
 </div>
 
 <script>
+// 재생바 4종: 앱(PlaybackBar.kt)의 그리기 코드를 그대로 옮겼다. 단위는 CSS px(=dp).
+(function () {
+  var WHITE = "#F2F2F4", REST = "rgba(242,242,244,0.22)", ACCENT = [255, 107, 61];
+  var M = { track: 11, thumb: 32, wave: 26, soundHalf: 16, walker: 0.8 };
+  var DURATION = 241, START = 92; // 4:01 곡의 1:32부터, 실제 속도의 8배로 흘러 위치가 눈에 띄게 움직인다
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function rgba(c, a) { return "rgba(" + c[0] + "," + c[1] + "," + c[2] + "," + a + ")"; }
+  function rr(g, x, y, w, h, r) { if (w <= 0 || h <= 0) return; r = Math.min(r, w / 2, h / 2); g.beginPath(); g.roundRect(x, y, w, h, r); g.fill(); }
+
+  // 물결 세 겹: 높이 비율, 주기, 한 주기 도는 시간(ms), 진하기
+  var LAYERS = [[1.0, 75, 9000, 0.45], [0.75, 50, 6000, 0.6], [0.5, 37.5, 4500, 0.9]];
+  function waves(g, right, base, t, maxH) {
+    if (right < 4) return;
+    LAYERS.forEach(function (L) {
+      var scale = L[0], period = L[1], dur = L[2], alpha = L[3];
+      var shift = (t % dur) / dur * period;
+      g.beginPath(); g.moveTo(0, base);
+      var steps = Math.max(8, Math.floor(right / 4));
+      for (var s = 0; s <= steps; s++) {
+        var px = right * s / steps, u = px / right;
+        var env = Math.sin(Math.PI * Math.pow(u, 0.8)) * (0.35 + 0.65 * u);
+        var w = 0.55 + 0.45 * Math.sin(2 * Math.PI * (px + shift) / period);
+        g.lineTo(px, base - maxH * scale * env * w);
+      }
+      g.lineTo(right, base); g.closePath();
+      var grad = g.createLinearGradient(0, base - maxH, 0, base);
+      grad.addColorStop(0, rgba(ACCENT, alpha)); grad.addColorStop(1, rgba(ACCENT, alpha * 0.5));
+      g.fillStyle = grad; g.fill();
+    });
+  }
+  function soundShape(i, n) {
+    var u = i / Math.max(1, n - 1);
+    var swell = 0.45 + 0.55 * Math.pow(Math.max(0, Math.sin(Math.PI * u)), 0.6);
+    var grain = 0.35 + 0.65 * Math.abs(Math.sin(i * 0.71) * Math.cos(i * 0.23) + 0.35 * Math.sin(i * 1.9));
+    return Math.min(1, swell * grain * 1.25);
+  }
+  function soundwave(g, w, x, cy, t) {
+    var n = Math.max(8, Math.floor(w / 5)), barW = 3, half = M.soundHalf, minH = 4;
+    for (var i = 0; i < n; i++) {
+      var cx = (i + 0.5) * w / n;
+      var speed = 0.5 + ((i * 37) % 10) / 18, phase = ((i * 53) % 10) / 10;
+      var pulse = 0.45 + 0.55 * (0.5 + 0.5 * Math.sin(2 * Math.PI * (t / 1000 / speed + phase)));
+      var h = (minH + 2 * half * soundShape(i, n)) * pulse;
+      var played = cx <= x;
+      if (played) { g.fillStyle = rgba(ACCENT, 0.25); rr(g, cx - barW * 1.5, cy - h / 2 - 1, barW * 3, h + 2, barW); }
+      g.fillStyle = played ? rgba(ACCENT, 1) : "rgba(242,242,244,0.26)"; rr(g, cx - barW / 2, cy - h / 2, barW, h, barW / 2);
+    }
+    var head = 2 * half + 8;
+    g.fillStyle = WHITE; rr(g, x - 1, cy - head / 2, 2, head, 1);
+  }
+  // 오른쪽을 보고 걷는 옆모습. 설계 단위 가로 30 · 세로 42, 발바닥 y=39. 걸음 한 주기 0.8초.
+  function walker(g, x, footY, t, scale) {
+    var p = (t % 800) / 800, rad = Math.PI / 180;
+    function thigh(q) { return -24 + 46 * (0.5 - 0.5 * Math.cos(2 * Math.PI * q)); }
+    function knee(q) { return 6 + (q >= 0.5 ? 44 * Math.sin(Math.PI * (q - 0.5) * 2) : 0); }
+    function arm(q) { return -26 + 48 * (0.5 - 0.5 * Math.cos(2 * Math.PI * q)); }
+    var bob = -1.5 * (0.5 - 0.5 * Math.cos(4 * Math.PI * p));
+    g.save(); g.translate(x - 15 * scale, footY - 39 * scale + bob * scale); g.scale(scale, scale);
+    g.lineWidth = 3; g.lineCap = "round"; g.lineJoin = "round";
+    function rot(deg, px, py, fn) { g.save(); g.translate(px, py); g.rotate(deg * rad); g.translate(-px, -py); fn(); g.restore(); }
+    function leg(q, c) {
+      g.strokeStyle = c;
+      rot(thigh(q), 14, 25, function () {
+        g.beginPath(); g.moveTo(14, 25); g.lineTo(14, 32); g.stroke();
+        rot(knee(q), 14, 32, function () { g.beginPath(); g.moveTo(14, 32); g.lineTo(14, 39); g.lineTo(17, 39); g.stroke(); });
+      });
+    }
+    function armLine(q, c) { g.strokeStyle = c; rot(arm(q), 16, 14, function () { g.beginPath(); g.moveTo(16, 14); g.lineTo(15, 21); g.lineTo(17, 26); g.stroke(); }); }
+    var back = "rgba(242,242,244,0.7)";
+    armLine(p, back); leg((p + 0.5) % 1, back);
+    g.fillStyle = WHITE; g.beginPath(); g.arc(18, 6, 5, 0, 2 * Math.PI); g.fill();
+    g.strokeStyle = WHITE; g.beginPath(); g.moveTo(17, 12); g.lineTo(14, 25); g.stroke();
+    leg(p, WHITE); armLine((p + 0.5) % 1, WHITE);
+    g.restore();
+  }
+  function draw(c, style, fraction, t) {
+    var dpr = window.devicePixelRatio || 1, w = c.clientWidth, h = c.clientHeight;
+    if (c.width !== Math.round(w * dpr) || c.height !== Math.round(h * dpr)) { c.width = Math.round(w * dpr); c.height = Math.round(h * dpr); }
+    var g = c.getContext("2d"); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, w, h);
+    // 물결·사람은 막대 위로 솟으니 막대를 칸 아래쪽에 둔다
+    var cy = style === "soundwave" ? h / 2 : h - 22, x = w * fraction;
+    if (style === "soundwave") { soundwave(g, w, x, cy, t); return; }
+    var tk = M.track, gap = 6, played = style === "basic" ? WHITE : rgba(ACCENT, 1);
+    if (style === "wave") waves(g, x - gap, cy - tk / 2 + 1, t, M.wave);
+    g.fillStyle = played; rr(g, 0, cy - tk / 2, x - gap, tk, tk / 2);
+    g.fillStyle = REST; rr(g, x + gap, cy - tk / 2, w - x - gap, tk, tk / 2);
+    g.fillStyle = played; g.beginPath(); g.arc(w - tk / 2, cy, 2, 0, 2 * Math.PI); g.fill();
+    if (style !== "walk") { g.fillStyle = WHITE; rr(g, x - 2, cy - M.thumb / 2, 4, M.thumb, 2); }
+    else walker(g, x, cy - tk / 2, t, M.walker);
+  }
+  var items = [].slice.call(document.querySelectorAll("canvas[data-bar]")).map(function (c) {
+    return { c: c, style: c.dataset.bar, label: c.parentNode.querySelector("[data-elapsed]") };
+  });
+  if (!items.length || !window.CanvasRenderingContext2D || !CanvasRenderingContext2D.prototype.roundRect) return;
+  var visible = true, running = false, t0 = performance.now();
+  function frame(now) {
+    var t = reduce ? 1500 : now - t0;
+    var sec = (START + t / 1000 * 8) % DURATION;
+    var label = Math.floor(sec / 60) + ":" + ("0" + Math.floor(sec % 60)).slice(-2);
+    items.forEach(function (it) { draw(it.c, it.style, sec / DURATION, t); it.label.textContent = label; });
+    running = visible && !reduce;
+    if (running) requestAnimationFrame(frame);
+  }
+  // 화면 밖에 있을 땐 그리기를 멈춘다
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(function (es) {
+      visible = es[0].isIntersecting;
+      if (visible && !running && !reduce) requestAnimationFrame(frame);
+    }).observe(document.getElementById("player-bars"));
+  }
+  requestAnimationFrame(frame);
+  window.addEventListener("resize", function () { if (!running) requestAnimationFrame(frame); });
+})();
+
 (function () {
   var days = ["일", "월", "화", "수", "목", "금", "토"];
   var dateEl = document.getElementById("clock-date");
