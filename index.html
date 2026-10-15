@@ -103,6 +103,12 @@ section { padding-block: 72px; }
 .shot figcaption span { color: var(--muted); font-size: 15px; }
 .tag { font-size: 12px; font-weight: 700; color: var(--indigo); border: 1.5px solid var(--line); border-radius: 999px; padding: 1px 10px; }
 
+/* 새 화면 */
+.news { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; list-style: none; padding: 0; margin: 0; }
+.news li { background: var(--surface); border: 1.5px solid var(--line); border-radius: 18px; padding: 22px; display: grid; gap: 8px; align-content: start; justify-items: start; }
+.news b { font-size: 18px; }
+.news p { margin: 0; color: var(--muted); font-size: 15px; }
+
 /* 동작 순서 */
 .flow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; list-style: none; padding: 0; margin: 0; counter-reset: step; }
 .flow li { background: var(--surface); border: 1.5px solid var(--line); border-radius: 18px; padding: 24px; display: grid; gap: 8px; align-content: start; counter-increment: step; }
@@ -146,6 +152,9 @@ section { padding-block: 72px; }
 .caution { background: var(--warn-soft); border: 1.5px solid var(--warn); border-radius: 16px; padding: 16px 20px; display: grid; gap: 4px; }
 .caution b { color: var(--warn); font-size: 17px; }
 .caution span { font-size: 15px; }
+.wait { background: var(--mint-soft); border-radius: 14px; padding: 14px 18px; display: grid; gap: 4px; }
+.wait b { color: var(--mint); font-size: 16px; }
+.wait span { font-size: 15px; }
 .note { margin-top: 18px; font-size: 14px; color: var(--muted); }
 /* 개인정보 */
 .privacy { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
@@ -159,7 +168,7 @@ footer { border-top: 1.5px solid var(--line); padding-block: 28px 40px; color: v
   .hero, .features { grid-template-columns: minmax(0, 1fr); }
   .guide { grid-template-columns: minmax(0, 1fr); }
   .gallery { grid-template-columns: minmax(0, 1fr); }
-  .flow, .privacy { grid-template-columns: minmax(0, 1fr); }
+  .flow, .privacy, .news { grid-template-columns: minmax(0, 1fr); }
   .nav { display: none; }
   section { padding-block: 52px; }
 }
@@ -174,6 +183,7 @@ footer { border-top: 1.5px solid var(--line); padding-block: 28px 40px; color: v
     <a class="brand" href="#top"><img src="img/icon.png" alt=""><b>PlugStay</b></a>
     <nav class="nav" aria-label="페이지 메뉴">
       <a href="#screens">화면</a>
+      <a href="#new">새 기능</a>
       <a href="#how">동작</a>
       <a href="#join">테스터 신청</a>
       <a href="#privacy">개인정보</a>
@@ -185,7 +195,7 @@ footer { border-top: 1.5px solid var(--line); padding-block: 28px 40px; color: v
       <div>
         <span class="status">Google Play 비공개 테스트 중</span>
         <h1>충전하는 동안,<br>휴대폰이 <em>탁상시계</em>가 됩니다</h1>
-        <p class="lead">충전기를 꽂으면 PlugStay가 저절로 떠서 큰 시계, 타이머, 날씨, 음악, 쉼 화면을 보여줘요. 침대 옆에서도, 책상 위에서도 그냥 세워 두기만 하면 됩니다.</p>
+        <p class="lead">충전기를 꽂으면 PlugStay가 저절로 떠서 큰 시계, 타이머, 날씨, 음악, 위젯, 쉼 화면을 보여줘요. 침대 옆에서도, 책상 위에서도 그냥 세워 두기만 하면 됩니다.</p>
         <div class="cta">
           <a class="btn primary" href="#join">테스터 신청하기</a>
           <a class="btn ghost" href="#screens">화면 둘러보기</a>
@@ -209,22 +219,38 @@ footer { border-top: 1.5px solid var(--line); padding-block: 28px 40px; color: v
       <div class="section-head">
         <span class="eyebrow">SCREENS</span>
         <h2>좌우로 테마, 위아래로 화면</h2>
-        <p class="lead">시계, 타이머, 인포, 사진, 날씨, 플레이어, 쉼&amp;생활. 7가지 테마에 화면이 25가지 있어요. 아래는 실제 휴대폰에서 캡처한 화면입니다.</p>
+        <p class="lead">시계, 타이머, 인포, 사진, 날씨, 플레이어, 쉼&amp;생활, 듀얼, 게임. 9가지 테마에 화면이 34가지 있어요. 아래는 실제 휴대폰에서 캡처한 화면입니다.</p>
       </div>
       <div class="gallery">
         <figure class="shot"><div class="frame"><img src="img/calm.jpg" alt="테라리움 영상 위에 시각이 표시된 쉼 화면" loading="lazy"></div>
-          <figcaption><span class="tag">쉼&amp;생활</span><b>테라리움·불멍·물멍</b><span>영상과 명화, 명언</span></figcaption></figure>
+          <figcaption><span class="tag">쉼&amp;생활</span><b>테라리움·모닥불·어항·바다</b><span>영상, 명화와 명언, LED 무드, 전광판</span></figcaption></figure>
         <figure class="shot"><div class="frame"><img src="img/big.jpg" alt="3:02가 크게 표시된 시계 화면" loading="lazy"></div>
           <figcaption><span class="tag">시계</span><b>큰 시계</b><span>요일·기온·다음 알람까지</span></figcaption></figure>
         <figure class="shot"><div class="frame"><img src="img/weather.jpg" alt="현재 날씨와 시간별 예보 화면" loading="lazy"></div>
-          <figcaption><span class="tag">날씨</span><b>날씨와 미세먼지</b><span>시간별·일별 예보, 달 모양</span></figcaption></figure>
+          <figcaption><span class="tag">날씨</span><b>날씨와 미세먼지</b><span>시간별·일별 예보, 달 모양과 월출·월몰</span></figcaption></figure>
         <figure class="shot"><div class="frame"><img src="img/pomo.jpg" alt="25:00 뽀모도로 타이머 화면" loading="lazy"></div>
-          <figcaption><span class="tag">타이머</span><b>뽀모도로</b><span>모래시계·메트로놈 등 8가지</span></figcaption></figure>
+          <figcaption><span class="tag">타이머</span><b>뽀모도로</b><span>모래시계·메트로놈·WOD 등 9가지</span></figcaption></figure>
         <figure class="shot"><div class="frame"><img src="img/night.jpg" alt="빨간색으로 바뀐 야간 모드 시계" loading="lazy"></div>
           <figcaption><span class="tag">야간 모드</span><b>밤에는 은은하게</b><span>빨강·주황으로 눈부심을 줄여요</span></figcaption></figure>
         <figure class="shot"><div class="frame"><img src="img/led.jpg" alt="초록 LED 숫자 시계 화면" loading="lazy"></div>
           <figcaption><span class="tag">시계</span><b>LED 시계</b><span>시계 색은 파스텔·형광 18가지</span></figcaption></figure>
       </div>
+    </section>
+
+    <section id="new">
+      <div class="section-head">
+        <span class="eyebrow">WHAT'S NEW</span>
+        <h2>새로 들어온 화면</h2>
+        <p class="lead">테스트 기간 동안 화면이 25가지에서 34가지로 늘었어요. 업데이트하면 바로 써 볼 수 있어요.</p>
+      </div>
+      <ul class="news">
+        <li><span class="tag">듀얼</span><b>위젯 두 칸</b><p>시계, 아날로그 시계(원형·네모·다이버), 달력, 음악, 인포 위젯을 칸마다 골라 나란히 띄워요.</p></li>
+        <li><span class="tag">게임</span><b>턴 타이머·대국 시계</b><p>보드게임 차례를 여러 명이 돌아가며 재거나, 둘이 마주 앉아 대국 시계로 써요.</p></li>
+        <li><span class="tag">타이머</span><b>WOD 타이머</b><p>For Time·AMRAP·EMOM·Tabata 운동 타이머예요. 운동하는 모습을 영상으로 남길 수도 있어요.</p></li>
+        <li><span class="tag">인포</span><b>오늘의 루틴·큰 배터리</b><p>매일 할 일을 체크해요. 뽀모도로·운동을 마치면 저절로 체크돼요. 충전 중인 배터리도 큼직하게 보여줘요.</p></li>
+        <li><span class="tag">쉼&amp;생활</span><b>LED 무드·전광판</b><p>LED 조명 화면, 그리고 원하는 문구를 색·스타일·속도를 골라 흘려보내는 전광판이에요.</p></li>
+        <li><span class="tag">플레이어</span><b>노래방 가사</b><p>재생 중인 곡의 가사를 노래방처럼 크게 따라가며 보여줘요.</p></li>
+      </ul>
     </section>
 
     <section id="how">
@@ -236,23 +262,24 @@ footer { border-top: 1.5px solid var(--line); padding-block: 28px 40px; color: v
       <ol class="flow">
         <li><b>충전기를 꽂으면</b><p>잠금화면이나 꺼진 화면에서도 대시보드가 바로 떠요. 충전 중 가로로 세울 때만 띄우도록 고를 수도 있어요.</p></li>
         <li><b>세워 두고 쓰다가</b><p>좌우로 넘겨 테마를, 위아래로 넘겨 화면 모양을 바꿔요. 화면 전체가 조금씩 움직여 번인을 막아요.</p></li>
-        <li><b>뽑으면 닫혀요</b><p>충전기를 뽑거나, 정한 시각이 되거나, 정한 시간이 지나면 자동으로 닫히게 할 수 있어요.</p></li>
+        <li><b>뽑으면 닫혀요</b><p>충전기를 뽑거나, 정한 시각이 되거나, 정한 시간이 지나면 자동으로 닫히게 할 수 있어요. 케이블이 잠깐 빠져도 바로 닫히지 않게, 뽑은 뒤 기다릴 시간도 고를 수 있어요.</p></li>
       </ol>
     </section>
 
     <section id="features">
       <div class="features">
-        <div class="map"><img src="img/map.jpg" alt="PlugStay의 25개 화면을 테마별로 정리한 화면 지도" loading="lazy"></div>
+        <div class="map"><img src="img/map.jpg" alt="PlugStay의 화면을 테마별로 정리한 화면 지도" loading="lazy"></div>
         <div>
           <div class="section-head">
             <span class="eyebrow">DETAILS</span>
-            <h2>한눈에 고르는 <span class="num">25</span>개 화면</h2>
+            <h2>한눈에 고르는 <span class="num">34</span>개 화면</h2>
           </div>
           <ul class="facts">
             <li><b>화면 지도</b><span>모든 화면을 썸네일로 보고 바로 골라요.</span></li>
             <li><b>야간 모드</b><span>어두워지거나 정한 시간이 되면 색을 바꿔요.</span></li>
             <li><b>번인 방지</b><span>밤새 켜 둬도 화면이 상하지 않게 위치를 조금씩 옮겨요.</span></li>
             <li><b>폴더블 지원</b><span>펼치거나 반쯤 접으면 두 칸에 서로 다른 화면을 띄워요.</span></li>
+            <li><b>처음 쓰는 분도 쉽게</b><span>첫 실행 때 넘기는 방법과 자동 실행 설정을 차례로 안내해요.</span></li>
           </ul>
         </div>
       </div>
@@ -289,7 +316,7 @@ footer { border-top: 1.5px solid var(--line); padding-block: 28px 40px; color: v
           </div>
           <ol class="guide">
             <li><b><i>3</i>"Become a tester"를 누르세요</b><span>그룹에 가입한 직후라면 이 화면이 뜨기까지 몇 분 걸릴 수 있어요.</span><img src="img/guide/step-3.jpg" alt="Google Play 테스트 초대 화면의 Become a tester 버튼에 빨간 표시" loading="lazy"></li>
-            <li><b><i>✓</i>"You are a tester."가 보이면 완료</b><span>이제 PlugStay를 설치할 수 있어요.</span><img src="img/guide/step-4.jpg" alt="You are a tester 문구에 초록 표시" loading="lazy"></li>
+            <li><b><i>✓</i>"You are a tester."가 보이면 완료</b><span>이제 PlugStay를 설치할 수 있어요. 설치 링크에 앱이 보이기까지는 시간이 조금 걸릴 수 있어요.</span><img src="img/guide/step-4.jpg" alt="You are a tester 문구에 초록 표시" loading="lazy"></li>
           </ol>
         </div>
 
@@ -298,6 +325,10 @@ footer { border-top: 1.5px solid var(--line); padding-block: 28px 40px; color: v
             <h3>3. 설치하기</h3>
             <div class="copyrow"><a class="go" href="https://play.google.com/store/apps/details?id=com.plugstay.app" target="_blank" rel="noopener">설치 링크 열기</a><code id="store">https://play.google.com/store/apps/details?id=com.plugstay.app</code><button class="copy" type="button" data-copy="store">복사</button></div>
           </div>
+          <div class="wait" role="note">
+            <b>"Become a tester"를 누른 뒤 바로 안 보여도 괜찮아요</b>
+            <span>테스터 등록이 Play 스토어에 반영되기까지 몇 분에서 길게는 몇 시간이 걸릴 수 있어요. 설치 링크에서 "찾을 수 없음"이 뜨거나 설치 버튼이 없으면 잠시 뒤 다시 열어 주세요.</span>
+          </div>
           <ol class="guide">
             <li><b><i>4</i>"설치"를 누르세요</b><span>앱 이름이 "PlugStay(사전 체험판)"로 보이면 맞게 들어온 거예요.</span><img src="img/guide/step-5.jpg" alt="Play 스토어 PlugStay(사전 체험판) 설치 버튼에 빨간 표시" loading="lazy"></li>
             <li><b><i>5</i>"대기 중…"이 끝날 때까지 기다리세요</b><span>다운로드가 시작될 때까지 조금 걸릴 수 있어요. 설치가 끝나면 앱을 열어 사용하세요.</span><img src="img/guide/step-6.jpg" alt="대기 중 상태 표시에 파란 표시" loading="lazy"></li>
@@ -305,7 +336,7 @@ footer { border-top: 1.5px solid var(--line); padding-block: 28px 40px; color: v
         </div>
 
         <div class="keep"><b>14일 동안 지우지 말아주세요</b><span>설치한 채로 가끔 열어 주시면 돼요. 정식 출시를 위한 Google Play 조건이에요.</span></div>
-        <p class="note" style="margin:0">설치 링크에서 "찾을 수 없음"이 뜨면 1·2단계를 다른 계정으로 했을 가능성이 커요. Play 스토어 오른쪽 위 프로필 계정을 확인해 주세요. 불편한 점이나 아이디어는 Play 스토어의 테스트 의견이나 leehama1236@gmail.com으로 보내주세요.</p>
+        <p class="note" style="margin:0">몇 시간이 지나도 설치 링크에서 "찾을 수 없음"이 뜨면 1·2단계를 다른 계정으로 했을 가능성이 커요. Play 스토어 오른쪽 위 프로필 계정을 확인해 주세요. 불편한 점이나 아이디어는 Play 스토어의 테스트 의견이나 leehama1236@gmail.com으로 보내주세요.</p>
       </div>
     </section>
 
