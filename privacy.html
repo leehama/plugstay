@@ -80,14 +80,16 @@ footer { color: var(--muted); font-size: 14px; padding-block: 32px 48px; border-
 
   <header class="doc">
     <h1>개인정보처리방침</h1>
-    <div class="meta">시행일 2026년 10월 19일 · 대상 앱 PlugStay (com.plugstay.app)</div>
+    <div class="meta">시행일 2026년 10월 20일 · 대상 앱 PlugStay (com.plugstay.app)</div>
   </header>
 
   <div class="summary">
     <b>한눈에 보기</b>
     <ul>
       <li>회원 가입이 없고, 이름·전화번호·이메일 같은 개인정보를 받지 않습니다.</li>
-      <li>앱이 만든 기록과 설정은 모두 이 휴대폰 안에만 저장되고, 개발자 서버로 보내지 않습니다. 개발자는 별도 서버를 운영하지 않습니다.</li>
+      <li>앱이 만든 기록과 설정은 모두 이 휴대폰 안에만 저장되고, 개발자 서버로 보내지 않습니다.</li>
+      <li>Pro 무료 체험 기간을 지키기 위해, 이 기기를 알아볼 수 없게 바꾼 값(암호화한 기기 ID)과 체험 시작 시각만 Google Firebase에 저장합니다.</li>
+      <li>Pro 결제는 Google Play가 처리하며, 개발자는 카드 정보 등 결제 정보를 받지 않습니다.</li>
       <li>날씨·가사·시세처럼 인터넷에서 받아 와야 하는 정보만, 필요한 최소한의 값을 해당 서비스에 보내 받아 옵니다.</li>
       <li>광고, 분석 도구, 사용자 추적을 쓰지 않습니다.</li>
     </ul>
@@ -95,7 +97,18 @@ footer { color: var(--muted); font-size: 14px; padding-block: 32px 48px; border-
 
   <section>
     <h2>1. 수집하는 개인정보</h2>
-    <p>PlugStay는 이용자를 식별할 수 있는 개인정보를 수집하거나 개발자에게 전송하지 않습니다. 다만 아래 기능을 쓰는 동안 휴대폰 안의 정보를 읽거나, 외부 서비스에 일부 값을 보냅니다.</p>
+    <p>PlugStay는 이름·전화번호·이메일처럼 이용자를 직접 알아볼 수 있는 개인정보를 수집하지 않습니다. 다만 아래 기능을 쓰는 동안 휴대폰 안의 정보를 읽거나, 외부 서비스에 일부 값을 보냅니다. Pro 체험과 결제에 쓰는 정보는 아래 표와 같습니다.</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>항목</th><th>쓰는 곳</th><th>보관 기간</th></tr></thead>
+        <tbody>
+          <tr><td>암호화한 기기 ID<br>(안드로이드 ID를 SHA-256으로 바꾼 값)</td><td>앱을 지웠다 다시 설치해도 무료 체험(7일)이 처음부터 다시 시작되지 않게 하기. 원래 기기 ID로 되돌릴 수 없고, 다른 정보와 연결하지 않습니다.</td><td>체험 기록이 필요한 동안. 삭제를 요청하면 지웁니다.</td></tr>
+          <tr><td>체험 시작 시각</td><td>무료 체험 남은 일수 계산</td><td>위와 같음</td></tr>
+          <tr><td>익명 사용자 번호<br>(Firebase 익명 인증)</td><td>체험 기록 서버에 앱만 접근하게 하기. 로그인·계정과 연결되지 않습니다.</td><td>위와 같음</td></tr>
+          <tr><td>Pro 구매 여부</td><td>Pro 기능 열기. 구매 내역은 Google Play가 구글 계정에 보관하며, 앱은 켤 때 Google Play에 확인만 합니다.</td><td>Google Play 정책을 따름</td></tr>
+        </tbody>
+      </table>
+    </div>
   </section>
 
   <section>
@@ -130,16 +143,21 @@ footer { color: var(--muted); font-size: 14px; padding-block: 32px 48px; border-
       <li><a href="https://www.artic.edu/terms" rel="noopener">시카고 미술관(Art Institute of Chicago) API</a> — 명화 배경. 보내는 값: 작품 검색 조건</li>
       <li><a href="https://picsum.photos" rel="noopener">Lorem Picsum</a> — 무작위 배경 사진. 보내는 값: 사진 크기</li>
     </ul>
+    <p>Pro 체험과 결제에는 아래 Google 서비스를 씁니다.</p>
+    <ul>
+      <li><a href="https://firebase.google.com/support/privacy" rel="noopener">Google Firebase</a>(Authentication 익명 인증, Cloud Firestore, 서울 리전) — 무료 체험 기록. 보내는 값: 암호화한 기기 ID, 체험 시작 시각</li>
+      <li><a href="https://policies.google.com/privacy" rel="noopener">Google Play 결제</a> — Pro 구매·구매 복원·환불. 결제 정보는 Google이 처리하며 개발자에게 전달되지 않습니다.</li>
+    </ul>
   </section>
 
   <section>
     <h2>4. 휴대폰에 저장하는 정보</h2>
-    <p>설정, 타이머·뽀모도로·운동 기록, 고른 도시·종목 같은 값은 휴대폰 안의 앱 저장공간에만 저장됩니다. 클라우드 백업도 꺼 두어 다른 곳으로 복사되지 않습니다. 앱을 지우면 함께 삭제됩니다. 녹화한 운동 영상은 갤러리에 남으므로 갤러리에서 직접 지워야 합니다.</p>
+    <p>설정, 타이머·뽀모도로·운동 기록, 고른 도시·종목, 체험 중 화면별로 본 횟수 같은 값은 휴대폰 안의 앱 저장공간에만 저장됩니다. 클라우드 백업도 꺼 두어 다른 곳으로 복사되지 않습니다. 앱을 지우면 함께 삭제됩니다. 녹화한 운동 영상은 갤러리에 남으므로 갤러리에서 직접 지워야 합니다.</p>
   </section>
 
   <section>
     <h2>5. 제3자 제공과 위탁</h2>
-    <p>개인정보를 제3자에게 판매하거나 제공하지 않으며, 처리를 위탁하지 않습니다.</p>
+    <p>개인정보를 제3자에게 판매하거나 제공하지 않습니다. 무료 체험 기록의 보관은 Google(Firebase)에 맡기며, 결제는 Google Play가 처리합니다.</p>
   </section>
 
   <section>
@@ -149,7 +167,7 @@ footer { color: var(--muted); font-size: 14px; padding-block: 32px 48px; border-
 
   <section>
     <h2>7. 이용자의 권리</h2>
-    <p>앱이 저장한 정보는 모두 휴대폰 안에 있으므로, 휴대폰 설정에서 PlugStay의 저장공간을 지우거나 앱을 삭제하면 바로 없어집니다. 권한은 휴대폰 설정에서 언제든 거두어들일 수 있습니다. 궁금한 점은 아래 연락처로 문의해 주세요.</p>
+    <p>휴대폰 안에 저장한 정보는 휴대폰 설정에서 PlugStay의 저장공간을 지우거나 앱을 삭제하면 바로 없어집니다. Firebase에 남은 체험 기록(암호화한 기기 ID와 체험 시작 시각)을 지우려면 아래 연락처로 요청해 주세요. 지운 뒤에는 다시 설치할 때 체험이 새로 시작될 수 있습니다. 권한은 휴대폰 설정에서 언제든 거두어들일 수 있습니다. 궁금한 점은 아래 연락처로 문의해 주세요.</p>
   </section>
 
   <section>
